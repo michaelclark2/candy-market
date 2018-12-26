@@ -8,6 +8,15 @@ namespace candy_market
         {
             var db = SetupNewApp();
             var userInput = MainMenu(db);
+
+            if (userInput.Key == ConsoleKey.D0)
+            {
+                Environment.Exit(0);
+            }
+            if (userInput.Key == ConsoleKey.D1)
+            {
+                AddNewCandy(db);
+            }
         }
 
         internal static CandyStorage SetupNewApp()
