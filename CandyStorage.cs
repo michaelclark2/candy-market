@@ -41,7 +41,11 @@ namespace candy_market
 
         public IList<string> GetCandyNames(string candyType)
         {
-            return _candies.Where(c => c.Flavor == candyType).Select(c => c.Name).Distinct().ToList();
+            return _candies
+                .Where(c => c.Flavor == candyType)
+                .Select(c => c.Name)
+                .Distinct()
+                .ToList();
         }
 
         internal void EatCandy(string candyName)
@@ -49,6 +53,22 @@ namespace candy_market
             var candies = _candies.Where(c => c.Name == candyName).ToList();
             var candy = candies.First(c => c.ReceivedOn == candies.Min(cc => cc.ReceivedOn));
             _candies.Remove(candy);
+        }
+
+        internal string EatRandomCandy(string candyType)
+        {
+            var candies = _candies
+                .Where(c => c.Flavor == candyType)
+                .Select(c => c.Name)
+                .Distinct()
+                .ToList();
+
+            var candyToEat = candies[new Random().Next(0, candies.Count)];
+
+            EatCandy(candyToEat);
+
+            return candyToEat;
+           
         }
     }
 }

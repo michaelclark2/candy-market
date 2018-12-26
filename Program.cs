@@ -19,7 +19,22 @@ namespace candy_market
                 }
                 if (userInput.Key == ConsoleKey.D2)
                 {
-                    EatCandy(db);
+                    var eatCandyMenu = new View()
+                        .AddMenuOption("Eat some candy from your collection.")
+                        .AddMenuOption("Eat a random candy.");
+                    Console.Write(eatCandyMenu.GetFullMenu());
+                    int selection;
+                    var key = Console.ReadKey().KeyChar.ToString();
+                    int.TryParse(key, out selection);
+                    if (selection == 1)
+                    {
+                        EatCandy(db);
+                    }
+                    else if (selection == 2)
+                    {
+                        EatRandomCandy(db);
+                        Console.ReadKey();
+                    }
                     userInput = MainMenu(db);
                 }
 
@@ -118,6 +133,22 @@ namespace candy_market
             var candyIndex = int.Parse(candySelected);
             var candyToEat = candyNames[candyIndex - 1];
             db.EatCandy(candyToEat);
+        }
+        internal static void EatRandomCandy(CandyStorage db)
+        {
+            var candyTypes = db.GetCandyTypes();
+            var candyTypeMenu = new View()
+                .AddMenuText("What kind of candy do you want to eat?")
+                .AddMenuOptions(candyTypes);
+            Console.Write(candyTypeMenu.GetFullMenu());
+
+            var candySelected = Console.ReadKey().KeyChar.ToString();
+            var candyIndex = int.Parse(candySelected);
+            var candyType = candyTypes[candyIndex - 1];
+            var candyEaten = db.EatRandomCandy(candyType);
+
+            Console.WriteLine();
+            Console.WriteLine($"You have eaten a {candyEaten}.");
         }
     }
 }
