@@ -33,5 +33,22 @@ namespace candy_market
         {
             return _candies.Select(c => c.Manufacturer).Distinct().ToList();
         }
+
+        public IList<string> GetCandyNames()
+        {
+            return _candies.Select(c => c.Name).Distinct().ToList();
+        }
+
+        public IList<string> GetCandyNames(string candyType)
+        {
+            return _candies.Where(c => c.Flavor == candyType).Select(c => c.Name).Distinct().ToList();
+        }
+
+        internal void EatCandy(string candyName)
+        {
+            var candies = _candies.Where(c => c.Name == candyName).ToList();
+            var candy = candies.First(c => c.ReceivedOn == candies.Min(cc => cc.ReceivedOn));
+            _candies.Remove(candy);
+        }
     }
 }
