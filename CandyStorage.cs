@@ -24,9 +24,14 @@ namespace candy_market
             return _candies.Select(c => c.Flavor).Distinct().ToList();
         }
 
-        internal void SaveNewCandy(ConsoleKey key)
+        internal void SaveNewCandy(Candy newCandy)
         {
-            throw new NotImplementedException();
+            _candies.Add(newCandy);
+        }
+
+        public IList<string> GetCandyMakes()
+        {
+            return _candies.Select(c => c.Manufacturer).Distinct().ToList();
         }
     }
 }

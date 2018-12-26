@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace candy_market
 {
@@ -9,14 +10,21 @@ namespace candy_market
             var db = SetupNewApp();
             var userInput = MainMenu(db);
 
-            if (userInput.Key == ConsoleKey.D0)
+            while (userInput.Key != ConsoleKey.D0)
             {
-                Environment.Exit(0);
+                if (userInput.Key == ConsoleKey.D1)
+                {
+                    AddNewCandy(db);
+                    userInput = MainMenu(db);
+                }
+                if (userInput.Key == ConsoleKey.D2)
+                {
+                    EatCandy(db);
+                    userInput = MainMenu(db);
+                }
+
             }
-            if (userInput.Key == ConsoleKey.D1)
-            {
-                AddNewCandy(db);
-            }
+
         }
 
         internal static CandyStorage SetupNewApp()
@@ -49,8 +57,41 @@ namespace candy_market
                 .AddMenuOptions(candyTypes);
             Console.Write(newCandyMenu.GetFullMenu());
 
-            var selectedCandyType = Console.ReadKey();
-            db.SaveNewCandy(selectedCandyType.Key);
+            var selectedCandyType = Console.ReadKey().KeyChar.ToString();
+            var candyTypeIndex = int.Parse(selectedCandyType);
+            var candyType = candyTypes[candyTypeIndex - 1];
+
+            var candyNameMenu = new View()
+                    .AddMenuText("What is the name of the candy?");
+            Console.Write(candyNameMenu.GetFullMenu());
+
+            var candyName = Console.ReadLine();
+
+
+            var candyMakes = db.GetCandyMakes();
+            var candyMakeMenu = new View()
+                    .AddMenuText("Who makes the candy?")
+                    .AddMenuOptions(candyMakes);
+
+            Console.Write(candyMakeMenu.GetFullMenu());
+
+            int candyMakeIndex;
+            var candyMake = Console.ReadLine();
+            int.TryParse(candyMake, out candyMakeIndex);
+
+            if (candyMakeIndex > 0)
+            {
+                candyMake = candyMakes[candyMakeIndex - 1];
+            }
+
+            var candyToAdd = new Candy { Name = candyName, Flavor = candyType, Manufacturer = candyMake, ReceivedOn = DateTime.Now };
+
+            db.SaveNewCandy(candyToAdd);
+        }
+
+        internal static void EatCandy(CandyStorage db)
+        {
+            throw new NotImplementedException();
         }
     }
 }
