@@ -24,5 +24,10 @@ namespace candy_market
             return candyToTrade;
         }
 
+        public string WantsToTrade()
+        {
+            return $"{Name} wants to trade.";
+        }
+
     }
 }

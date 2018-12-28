@@ -70,9 +70,22 @@ namespace candy_market
             }
 
             var tradeCandyMenu = new View()
-                .AddMenuText("Choose a trade request");
+                .AddMenuText("Choose a trade request")
+                .AddMenuOptions(otherUsers.Select(u => u.WantsToTrade()).ToList());
             Console.Write(tradeCandyMenu.GetFullMenu());
-            Console.ReadKey();
+
+            var chosenUser = Console.ReadKey().KeyChar.ToString();
+            var chosenIndex = int.Parse(chosenUser);
+            var otherUser = otherUsers[chosenIndex - 1];
+
+            var userCandyMenu = new View()
+                .AddMenuText($"Request a candy from {otherUser.Name}")
+                .AddMenuOptions(otherUser.Candies.Select(c => c.Name).ToList());
+            Console.Write(userCandyMenu.GetFullMenu());
+
+            var chosenCandy = Console.ReadKey();
+
+
         }
 
         internal static CandyStorage SetupNewApp()
