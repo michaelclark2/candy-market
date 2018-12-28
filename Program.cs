@@ -83,7 +83,16 @@ namespace candy_market
                 .AddMenuOptions(otherUser.Candies.Select(c => c.Name).ToList());
             Console.Write(userCandyMenu.GetFullMenu());
 
-            var chosenCandy = Console.ReadKey();
+            var chosenCandy = Console.ReadKey().KeyChar.ToString();
+            var candyIndex = int.Parse(chosenCandy);
+            var otherCandy = otherUser.Candies[candyIndex - 1];
+
+            var yourCandyMenu = new View()
+                .AddMenuText($"Which candy do you want to trade for {otherCandy.Name}?")
+                .AddMenuOptions(you.Candies.Select(c => c.Name).ToList());
+            Console.Write(yourCandyMenu.GetFullMenu());
+
+            var yourCandy = Console.ReadKey().KeyChar.ToString();
 
 
         }
