@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace candy_market
@@ -12,10 +13,10 @@ namespace candy_market
 
             while (userInput.Key != ConsoleKey.D0)
             {
+                userInput = MainMenu(db);
                 if (userInput.Key == ConsoleKey.D1)
                 {
                     AddNewCandy(db);
-                    userInput = MainMenu(db);
                 }
                 if (userInput.Key == ConsoleKey.D2)
                 {
@@ -23,6 +24,7 @@ namespace candy_market
                         .AddMenuOption("Eat some candy from your collection.")
                         .AddMenuOption("Eat a random candy.");
                     Console.Write(eatCandyMenu.GetFullMenu());
+
                     int selection;
                     var key = Console.ReadKey().KeyChar.ToString();
                     int.TryParse(key, out selection);
@@ -35,11 +37,42 @@ namespace candy_market
                         EatRandomCandy(db);
                         Console.ReadKey();
                     }
-                    userInput = MainMenu(db);
+                }
+
+                if (userInput.Key == ConsoleKey.D3)
+                {
+
+                    TradeCandy(db);
+                   
                 }
 
             }
 
+        }
+
+        private static void TradeCandy(CandyStorage db)
+        {
+            var you = new CandyUser("You");
+            you.Candies = db.GetSomeCandy();
+
+            var otherUsers = new List<CandyUser>()
+            {
+                new CandyUser("Greg"),
+                new CandyUser("Charlene"),
+                new CandyUser("Timmy"),
+                new CandyUser("Madeline")
+
+            };
+            
+            foreach(var user in otherUsers)
+            {
+                user.Candies = db.GetSomeCandy();
+            }
+
+            var tradeCandyMenu = new View()
+                .AddMenuText("Choose a trade request");
+            Console.Write(tradeCandyMenu.GetFullMenu());
+            Console.ReadKey();
         }
 
         internal static CandyStorage SetupNewApp()
@@ -58,6 +91,7 @@ namespace candy_market
             View mainMenu = new View()
                 .AddMenuOption("Did you just get some new candy? Add it here.")
                 .AddMenuOption("Do you want to eat some candy? Take it here.")
+                .AddMenuOption("Do you want to trade some candy? Do it here.")
                 .AddMenuText("Press 0 to exit.");
             Console.Write(mainMenu.GetFullMenu());
             var userOption = Console.ReadKey();

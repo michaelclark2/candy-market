@@ -17,7 +17,21 @@ namespace candy_market
             new Candy() { Name = "M&Ms", Manufacturer = "Mars", Flavor = "Chocolate", ReceivedOn = DateTime.Now.AddDays(1) },
             new Candy() { Name = "PayDay", Manufacturer = "Mars", Flavor = "Nutty", ReceivedOn = DateTime.Now.AddDays(1) },
             new Candy() { Name = "Skittles", Manufacturer = "Mars", Flavor = "Fruity", ReceivedOn = DateTime.Now.AddDays(0) },
+            new Candy() { Name = "Laffy Taffy", Flavor = "Fruity", Manufacturer = "Willy Wonka", ReceivedOn = DateTime.Now },
+            new Candy() { Name = "Almond Joy", Flavor = "Chocolate", Manufacturer = "Hershey", ReceivedOn = DateTime.Now },
+            new Candy() { Name = "Crunch Bar", Flavor = "Chocolate", Manufacturer = "Nestle", ReceivedOn = DateTime.Now },
+            new Candy() { Name = "Peanut M&Ms", Flavor = "Nutty", Manufacturer = "Mars", ReceivedOn = DateTime.Now }
         }; 
+
+        public List<Candy> GetSomeCandy()
+        {
+            var candies = new List<Candy>();
+            for (var i = 0; i < 5; i++)
+            {
+                candies.Add(_candies[new Random().Next(0, _candies.Count)]);
+            }
+            return candies;
+        }
 
         public IList<string> GetCandyTypes()
         {
