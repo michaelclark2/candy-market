@@ -6,10 +6,25 @@ namespace candy_market
 {
     class Program
     {
+        private static CandyUser you = new CandyUser("You");
+        private static List<CandyUser> otherUsers = new List<CandyUser>()
+            {
+                new CandyUser("Greg"),
+                new CandyUser("Charlene"),
+                new CandyUser("Timmy"),
+                new CandyUser("Madeline")
+
+            };
+
         static void Main(string[] args)
         {
             var db = SetupNewApp();
             var userInput = MainMenu(db);
+            you.Candies = db.GetSomeCandy();
+            foreach (var user in otherUsers)
+            {
+                user.Candies = db.GetSomeCandy();
+            }
 
             while (userInput.Key != ConsoleKey.D0)
             {
@@ -52,22 +67,10 @@ namespace candy_market
 
         private static void TradeCandy(CandyStorage db)
         {
-            var you = new CandyUser("You");
-            you.Candies = db.GetSomeCandy();
 
-            var otherUsers = new List<CandyUser>()
-            {
-                new CandyUser("Greg"),
-                new CandyUser("Charlene"),
-                new CandyUser("Timmy"),
-                new CandyUser("Madeline")
-
-            };
             
-            foreach(var user in otherUsers)
-            {
-                user.Candies = db.GetSomeCandy();
-            }
+            
+            
 
             var tradeCandyMenu = new View()
                 .AddMenuText("Choose a trade request")
@@ -92,7 +95,13 @@ namespace candy_market
                 .AddMenuOptions(you.Candies.Select(c => c.Name).ToList());
             Console.Write(yourCandyMenu.GetFullMenu());
 
-            var yourCandy = Console.ReadKey().KeyChar.ToString();
+            var yourChosenCandy = Console.ReadKey().KeyChar.ToString();
+            var yourIndex = int.Parse(yourChosenCandy);
+            var yourCandy = you.Candies[yourIndex - 1];
+
+            you.TradeCandy(otherCandy, you.Candies.FindIndex(c => c.Name == yourCandy.Name));
+            otherUser.TradeCandy(yourCandy, otherUser.Candies.FindIndex(c => c.Name == otherCandy.Name));
+
 
 
         }
